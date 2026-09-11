@@ -1,0 +1,30 @@
+{
+  "name": "interface",
+  "description": "Local HTTP and WebSocket delivery and quality dashboard",
+  "presetRules": [],
+  "templateRules": [],
+  "membership": [
+    {
+      "pathPattern": "(^|/)scripts/prepare-typecheck\\.mjs$"
+    },
+    {
+      "pathPattern": "(^|/)src/(http|runtime)/"
+    },
+    {
+      "pathPattern": "(^|/)src/server\\.ts$"
+    },
+    {
+      "pathPattern": "(^|/)shared/protocol\\.ts$"
+    },
+    {
+      "pathPattern": "(^|/)web/src/"
+    },
+    {
+      "pathPattern": "(^|/)vite\\.config\\.ts$"
+    }
+  ],
+  "specRefs": [
+    "spec/ux/product.md",
+    "spec/interface/api.md"
+  ]
+}

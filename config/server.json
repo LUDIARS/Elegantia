@@ -1,0 +1,12 @@
+{
+  "host": "127.0.0.1",
+  "access": "loopback-and-exview",
+  "catalogPath": "data/catalog.json",
+  "documentPath": "spec/quality/catalog.md",
+  "staticRoot": "web/dist",
+  "logsDir": "logs",
+  "databaseEnv": "ELEGANTIA_DATABASE_URL",
+  "maxImportRecords": 500,
+  "maxPayloadBytes": 1048576,
+  "shutdownTimeoutMs": 10000
+}

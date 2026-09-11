@@ -1,0 +1,33 @@
+{
+  "id": "elegantia-quality",
+  "version": "2026-09-11.1",
+  "title": "Elegantia 品質達成カタログ",
+  "description": "各項目の実装内容・達成するUX・必須要件・追加要件を管理する。カタログの存在は試験実施や合格を意味しない。",
+  "categories": [
+    {
+      "id": "C",
+      "name": "共通品質",
+      "count": 30
+    },
+    {
+      "id": "A",
+      "name": "アクションゲーム",
+      "count": 45
+    },
+    {
+      "id": "L",
+      "name": "3DCG",
+      "count": 40
+    },
+    {
+      "id": "G",
+      "name": "グラフィックス",
+      "count": 50
+    },
+    {
+      "id": "E",
+      "name": "Elegantia",
+      "count": 15
+    }
+  ]
+}

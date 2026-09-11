@@ -1,0 +1,19 @@
+{
+  "name": "results",
+  "description": "Immutable evidence-backed results and current versus historical coverage",
+  "presetRules": [],
+  "templateRules": [],
+  "membership": [
+    {
+      "pathPattern": "(^|/)shared/(results|coverage)\\.ts$"
+    },
+    {
+      "pathPattern": "(^|/)src/(results|db)/"
+    }
+  ],
+  "specRefs": [
+    "spec/ux/results.md",
+    "spec/data/schema.md",
+    "spec/feature/result-tracking.md"
+  ]
+}

@@ -1,0 +1,24 @@
+services:
+  - code: elegantia
+    name: Elegantia
+    tier: personal
+    project_code: El
+    component: backend
+    port: 17860
+    repo: LUDIARS/Elegantia
+    runtime: node
+    cwd: ${ARS_ROOT}/Elegantia
+    command: node --env-file-if-exists=.env dist/src/server.js
+    autostart: false
+    restart_policy: "no"
+    health:
+      type: http
+      url: http://127.0.0.1:17860/api/health
+      interval_sec: 30
+      grace_period_sec: 10
+    log_path: ${ARS_ROOT}/logs/elegantia
+    viewer:
+      enabled: true
+      entry_path: /
+    env:
+      ELEGANTIA_VIEWER_ORIGINS: http://127.0.0.1:17334,http://localhost:17334,https://exiv.ai-run-do.com,https://web.ai-run-do.com

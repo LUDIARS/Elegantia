@@ -1,0 +1,21 @@
+{
+  "name": "catalog",
+  "description": "Versioned quality criteria and their five-part definitions",
+  "presetRules": [],
+  "templateRules": [],
+  "membership": [
+    {
+      "pathPattern": "(^|/)shared/catalog\\.ts$"
+    },
+    {
+      "pathPattern": "(^|/)src/catalog/"
+    },
+    {
+      "pathPattern": "(^|/)scripts/render-catalog\\.mjs$"
+    }
+  ],
+  "specRefs": [
+    "spec/ux/product.md",
+    "spec/feature/result-tracking.md"
+  ]
+}

@@ -1,0 +1,5 @@
+.policy { margin: 0 0 24px; border: 1px solid #3c4233; border-radius: 7px; padding: 14px 18px; }
+.policy-toggle { cursor: pointer; color: #d2c38f; }
+.policy-text { max-height: 450px; overflow: auto; font-size: 13px; overflow-wrap: anywhere; }
+.policy-text h3 { margin: 24px 0 10px; font-weight: 700; color: #d2c38f; }
+.policy-text p { margin: 8px 0; white-space: pre-wrap; }
