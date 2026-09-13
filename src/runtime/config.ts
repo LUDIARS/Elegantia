@@ -14,10 +14,12 @@ const configSchema = z.object({
 }).strict();
 const fragmentSchema = z.object({ services: z.array(z.object({ code: z.string(), port: z.number().int().min(1).max(65535) })) });
 export interface ServerConfig extends z.infer<typeof configSchema> {
+  mode: 'public' | 'local';
   root: string; port: number; origins: Set<string>; hosts: Set<string>; viewerOrigins: string[];
 }
 export async function loadConfig(root: string, env: NodeJS.ProcessEnv): Promise<ServerConfig> {
   const config = configSchema.parse(JSON.parse(await readFile(resolve(root, 'config/server.json'), 'utf8')));
+  const mode = z.enum(['public', 'local']).parse(env.ELEGANTIA_MODE ?? 'public');
   const fragment = fragmentSchema.parse(parse(await readFile(resolve(root, 'excubitor.catalog.yaml'), 'utf8')));
   const services = fragment.services.filter(service => service.code === 'elegantia');
   if (services.length !== 1) throw new Error('Exactly one elegantia service must be declared');
@@ -34,6 +36,6 @@ export async function loadConfig(root: string, env: NodeJS.ProcessEnv): Promise<
   const directOrigin = publicOrigin(env.ELEGANTIA_PUBLIC_URL);
   const hosts = new Set(['127.0.0.1:' + port, 'localhost:' + port, ...injectedHosts(env.LUDIARS_ALLOWED_HOSTS)]);
   if (directOrigin) hosts.add(new URL(directOrigin).host);
-  return { ...config, databasePath: resolve(root, databasePath), root, port, hosts, viewerOrigins,
+  return { ...config, mode, databasePath: resolve(root, databasePath), root, port, hosts, viewerOrigins,
     origins: new Set([...localOrigins, ...viewerOrigins, ...(directOrigin ? [directOrigin] : [])]) };
 }

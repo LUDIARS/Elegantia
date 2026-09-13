@@ -1,0 +1,13 @@
+{
+  "name": "local-evaluation",
+  "description": "Public catalog boundary, local registered projects and append-only human OK/NG comments",
+  "presetRules": [],
+  "templateRules": [],
+  "membership": [
+    {"pathPattern":"(^|/)shared/local\\.ts$"},
+    {"pathPattern":"(^|/)src/(projects/(registry|page)|runtime/local-access|http/local)\\.ts$"},
+    {"pathPattern":"(^|/)web/src/(LocalProjects|HumanReview)\\.tsx$"},
+    {"pathPattern":"(^|/)tests/(public-local-boundary|human-reviews|project-page)\\.test\\.mjs$"}
+  ],
+  "specRefs": ["spec/feature/public-local-evaluation.md", "spec/data/schema.md"]
+}

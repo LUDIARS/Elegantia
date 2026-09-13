@@ -8,8 +8,10 @@ import { ResultRepository } from '../db/repository.js';
 import { validateResult } from '../results/validate.js';
 import { allowedUpgrade } from './access.js';
 import { clientError } from './errors.js';
+import { isLocalAccess } from '../runtime/local-access.js';
 
 export interface SocketDependencies {
+  mode: 'public' | 'local'; port: number;
   server: Server; origins: Set<string>; hosts: Set<string>; maxPayloadBytes: number; maxImportRecords: number;
   repository: ResultRepository; catalog: Catalog; logger: Writer; now: () => Date;
 }
@@ -17,7 +19,8 @@ export function attachSocket(deps: SocketDependencies): { close(): Promise<void>
   const wss = new WebSocketServer({ noServer: true, maxPayload: deps.maxPayloadBytes, perMessageDeflate: false });
   const pending = new Set<Promise<void>>();
   const onUpgrade = (request: import('node:http').IncomingMessage, socket: import('node:stream').Duplex, head: Buffer): void => {
-    if (request.url !== '/ws' || !allowedUpgrade(request, deps.origins, deps.hosts)) {
+    if (request.url !== '/ws' || !isLocalAccess(deps.mode, deps.port, request.headers.host, request.headers.origin)
+      || !allowedUpgrade(request, deps.origins, deps.hosts)) {
       socket.write('HTTP/1.1 403 Forbidden\r\nConnection: close\r\n\r\n');
       socket.destroy();
       return;

@@ -8,6 +8,13 @@ status: implemented
 
 # データ所有
 
+## 人間の申し送り
+
+migrations/002_human_reviews.sqlがhuman_reviewsを追加する。
+sequence主キー、request_id一意、project/item_id、OK/NG、comment、recorded_atを所有する。
+試験結果の合否と分離し、切り替え時は新しい行を追記する。コメントもGit管理対象外のSQLiteに保存する。
+起動時はmigrations内の番号付きSQLを名前順で排他トランザクション内に適用する。各DDLは再適用可能にする。
+
 | データ | 正本 | 保護 |
 |---|---|---|
 | 品質基準 | 個別OKF Markdown | Gitレビュー・版管理 |

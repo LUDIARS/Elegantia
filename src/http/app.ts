@@ -10,18 +10,27 @@ import { allowedHost } from './access.js';
 import { clientError } from './errors.js';
 import type { ServerConfig } from '../runtime/config.js';
 import { libraryRouter } from './library.js';
+import { isLocalAccess } from '../runtime/local-access.js';
+import { localRouter } from './local.js';
+import type { HumanReviews } from '../db/human-reviews.js';
 
 export interface AppDependencies {
   catalog: Catalog; repository: ResultRepository; config: ServerConfig; logger: Writer;
   ping: () => Promise<void>;
+  reviews: HumanReviews;
 }
 export function createApp(deps: AppDependencies): Hono {
   const { config, catalog, repository, logger } = deps;
   const app = new Hono();
+  const publicPaths = new Set(['/api/runtime', '/api/health', '/api/catalog', '/api/catalog.md', '/api/policy', '/api/library']);
   app.use('*', async (c, next) => {
     if (!allowedHost(c.req.header('host'), config.hosts)) return c.json({ error: 'Host not allowed' }, 403);
     const origin = c.req.header('origin');
     if (origin && !config.origins.has(origin)) return c.json({ error: 'Origin not allowed' }, 403);
+    const isPublicContent = publicPaths.has(c.req.path) || /^\/api\/items\/[CALGE]\d{2}\/document$/.test(c.req.path)
+      || /^\/api\/library\/[^/]+\/document$/.test(c.req.path);
+    if (c.req.path.startsWith('/api/') && !isPublicContent
+      && !isLocalAccess(config.mode, config.port, c.req.header('host'), origin)) return c.json({ error: 'Local tool only' }, 403);
     c.header('X-Content-Type-Options', 'nosniff');
     c.header('Referrer-Policy', 'no-referrer');
     c.header('Cross-Origin-Resource-Policy', 'same-origin');
@@ -38,6 +47,8 @@ export function createApp(deps: AppDependencies): Hono {
     catch { return c.json({ service: 'elegantia', status: 'database_unavailable' }, 503); }
   });
   app.get('/api/catalog', c => c.json(catalog));
+  app.get('/api/runtime', c => c.json({ mode: isLocalAccess(config.mode, config.port, c.req.header('host'), c.req.header('origin')) ? 'local' : 'public' }));
+  app.route('/api/local', localRouter(config, deps.reviews, catalog));
   app.route('/api/library', libraryRouter(config.root));
   app.get('/api/policy', async c => c.json({ markdown: await readFile(config.root + '/quality/assessment-policy.md', 'utf8') }));
   app.get('/api/items/:id/document', async c => {

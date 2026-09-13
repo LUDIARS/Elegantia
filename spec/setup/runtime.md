@@ -8,6 +8,15 @@ status: implemented
 
 # 実行環境
 
+## 公開とローカル
+
+所有カタログのELEGANTIA_MODE=publicが公開検索用の既定設定。
+ローカル評価を利用する配備ではExのサービス設定でELEGANTIA_MODE=localを明示し、
+本体へhttp://127.0.0.1:17860/で接続する。公開URLからはlocal設定時も評価を取得・変更できない。
+ローカル一覧には同じworkspaceのConcordia登録が必要。接続先はConcordia所有カタログから解決する。
+調査分析はローカル環境のLLMで実行する。サーバにはLLM実行機能がない。
+評価結果の受け渡しは既存の結果JSON形式を使用する。
+
 Node.js 24.17.0、npmを使用する。SQLiteはNode組み込みのnode:sqliteを使用し、外部DBサーバや追加ドライバを必要としない。
 
 既定のDBファイルはプロジェクトルートの.local/elegantia.sqlite。

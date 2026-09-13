@@ -1,5 +1,5 @@
-import { mkdir, readFile } from 'node:fs/promises';
-import { dirname } from 'node:path';
+import { mkdir, readFile, readdir } from 'node:fs/promises';
+import { dirname, join } from 'node:path';
 import { DatabaseSync } from 'node:sqlite';
 export interface Database {
   db: DatabaseSync;
@@ -7,7 +7,10 @@ export interface Database {
   close(): Promise<void>;
 }
 export async function connectDatabase(filename: string, migrationPath: string): Promise<Database> {
-  const migration = await readFile(migrationPath, 'utf8');
+  const directory = dirname(migrationPath);
+  const names = (await readdir(directory)).filter(name => /^\d{3}_[a-z_]+\.sql$/.test(name)).sort();
+  if (!names.length) throw new Error('No database migrations found');
+  const migration = (await Promise.all(names.map(name => readFile(join(directory, name), 'utf8')))).join('\n');
   await mkdir(dirname(filename), { recursive: true });
   const db = new DatabaseSync(filename);
   try {

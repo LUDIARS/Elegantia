@@ -7,6 +7,7 @@ import { createLogger } from './runtime/logger.js';
 import { loadCatalog } from './catalog/load.js';
 import { connectDatabase } from './db/connect.js';
 import { ResultRepository } from './db/repository.js';
+import { HumanReviews } from './db/human-reviews.js';
 import { createApp } from './http/app.js';
 import { attachSocket } from './http/socket.js';
 
@@ -24,13 +25,13 @@ async function main(): Promise<void> {
   try { database = await connectDatabase(config.databasePath, resolve(root, 'migrations/001_results.sql')); }
   catch (error) { logger.write({ level: 'error', msg: 'Database initialization failed' }); await logger.close(); throw error; }
   const repository = new ResultRepository(database.db, () => new Date());
-  const app = createApp({ config, catalog, repository, logger, ping: database.ping });
+  const app = createApp({ config, catalog, repository, logger, ping: database.ping, reviews: new HumanReviews(database.db, () => new Date()) });
   const server = serve({ fetch: app.fetch, hostname: config.host, port: config.port });
   if (!(server instanceof Server)) {
     server.close(); await database.close(); await logger.close();
     throw new Error('HTTP/1 server required');
   }
-  const socket = attachSocket({ server, origins: config.origins, hosts: config.hosts, maxPayloadBytes: config.maxPayloadBytes,
+  const socket = attachSocket({ server, mode: config.mode, port: config.port, origins: config.origins, hosts: config.hosts, maxPayloadBytes: config.maxPayloadBytes,
     maxImportRecords: config.maxImportRecords, repository, catalog, logger, now: () => new Date() });
   let stopping = false;
   async function shutdown(code: number): Promise<void> {

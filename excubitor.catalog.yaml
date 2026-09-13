@@ -22,5 +22,6 @@ services:
       enabled: true
       entry_path: /
     env:
+      ELEGANTIA_MODE: public
       ELEGANTIA_PUBLIC_URL: https://el${DOMAIN_ROOT}
       ELEGANTIA_VIEWER_ORIGINS: http://127.0.0.1:17334,http://localhost:17334,https://exiv${DOMAIN_ROOT},https://web${DOMAIN_ROOT}
