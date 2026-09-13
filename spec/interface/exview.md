@@ -20,9 +20,10 @@ Elegantiaはユーザー単位の認証・権限分離を提供せず、許可�
 入口側のAccess保護がない状態でインターネットへ公開しない。
 
 ELEGANTIA_VIEWER_ORIGINSに完全一致のOriginだけを列挙する。
-Tunnel直結のhttps://el.ai-run-do.comも同じ許可設定へ明示的に登録する。
-module script取得時のOriginとWebSocketのOriginもこの設定で照合する。
-Hostの共通許可だけでは新しい公開URLのOriginは許可されない。
+Tunnel直結はExから注入するELEGANTIA_PUBLIC_URLを読み、完全一致のHTTPS Originとして許可する。
+module scriptとWebSocketも同じOrigin判定を使う。未設定ならローカルと追加Viewer Originのみ許可する。
+カタログではhttps://el${DOMAIN_ROOT}を定義し、Exのドメイン正本から展開する。
+直接公開URLはHost許可にも追加する。Hostの共通許可からOriginのワイルドカード許可は生成しない。
 カタログの初期値はローカルExView（所有カタログで確認した17334）と既存のweb/exiv公開Origin。
 ExView側の変更時はこの設定を更新する。転送時もOriginを偽装せずサーバで照合する。
 CSPのframe-ancestorsはselfと設定されたViewer Originのみ許可する。
@@ -31,6 +32,15 @@ Hostは自身のループバックとExcubitorが注入するLUDIARS_ALLOWED_HOS
 HTTPとWebSocketで同じHost許可を使う。Hostの許可はOriginの許可へ自動展開しない。
 WebSocketのOrigin完全一致と接続元ループバック制限を維持する。
 参考: Excubitor/frontend/config.ts、Excubitor/spec/faq/allowedhosts-global-env.md。
+
+## Praeformaとの対応
+
+参照コミット: e894e88c942b4f835096e9eb3a12ca41101bd524。
+Praeforma/web/vite.config.tsと同様、ViteにもLUDIARS_ALLOWED_HOSTSを注入する。
+Praeforma/server/src/config.tsとlib/local-access.tsに倣い、公開URLと追加Originを分離する。
+PfのPRAEFORMA_PUBLIC_URLに相当する設定がELEGANTIA_PUBLIC_URL。
+PfのPRAEFORMA_ALLOWED_ORIGINSに相当する既存設定がELEGANTIA_VIEWER_ORIGINS。
+公開URLに対するHostとOriginを同じ配備設定から導出し、利用者ごとのドメインをアプリ本体へ直書きしない。
 
 ## 反映
 

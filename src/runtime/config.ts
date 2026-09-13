@@ -3,6 +3,7 @@ import { resolve } from 'node:path';
 import { parse } from 'yaml';
 import { z } from 'zod';
 import { injectedHosts } from './allowed-hosts.js';
+import { publicOrigin } from './public-origin.js';
 
 const configSchema = z.object({
   host: z.literal('127.0.0.1'), access: z.literal('loopback-and-exview'),
@@ -30,7 +31,9 @@ export async function loadConfig(root: string, env: NodeJS.ProcessEnv): Promise<
     if (url.origin !== origin || !['http:', 'https:'].includes(url.protocol)) throw new Error('Invalid Viewer origin');
   }
   const localOrigins = ['http://127.0.0.1:' + port, 'http://localhost:' + port];
+  const directOrigin = publicOrigin(env.ELEGANTIA_PUBLIC_URL);
   const hosts = new Set(['127.0.0.1:' + port, 'localhost:' + port, ...injectedHosts(env.LUDIARS_ALLOWED_HOSTS)]);
+  if (directOrigin) hosts.add(new URL(directOrigin).host);
   return { ...config, databasePath: resolve(root, databasePath), root, port, hosts, viewerOrigins,
-    origins: new Set([...localOrigins, ...viewerOrigins]) };
+    origins: new Set([...localOrigins, ...viewerOrigins, ...(directOrigin ? [directOrigin] : [])]) };
 }

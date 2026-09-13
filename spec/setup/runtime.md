@@ -33,7 +33,8 @@ excubitor.catalog.yamlがポート17860と起動コマンドを所有する。
 既定の待受は127.0.0.1であり、公開ネットワークへ直接公開しない。
 Excubitorが注入するLUDIARS_ALLOWED_HOSTSをHost許可へ追加する。
 カンマ区切りのホスト名に対応し、先頭ドットはドメイン自身とサブドメインを許可する。
-Originの許可はELEGANTIA_VIEWER_ORIGINSで別途完全一致を指定する。
+直接公開URLはELEGANTIA_PUBLIC_URLで、追加Viewer OriginはELEGANTIA_VIEWER_ORIGINSで完全一致を指定する。
+Exが所有カタログの${DOMAIN_ROOT}を展開して両設定を注入する。未展開または不正な公開URLは起動時に拒否する。
 
 SIGINT/SIGTERMでWebSocket、HTTP、SQLite接続、ログを閉じる。
 ヘルスチェックはDBへの問い合わせを含む。

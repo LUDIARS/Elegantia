@@ -5,6 +5,7 @@ services:
     project_code: El
     component: backend
     port: 17860
+    frontend_url: https://el${DOMAIN_ROOT}
     repo: LUDIARS/Elegantia
     runtime: node
     cwd: ${ARS_ROOT}/Elegantia
@@ -21,4 +22,5 @@ services:
       enabled: true
       entry_path: /
     env:
-      ELEGANTIA_VIEWER_ORIGINS: http://127.0.0.1:17334,http://localhost:17334,https://exiv.ai-run-do.com,https://web.ai-run-do.com,https://el.ai-run-do.com
+      ELEGANTIA_PUBLIC_URL: https://el${DOMAIN_ROOT}
+      ELEGANTIA_VIEWER_ORIGINS: http://127.0.0.1:17334,http://localhost:17334,https://exiv${DOMAIN_ROOT},https://web${DOMAIN_ROOT}
