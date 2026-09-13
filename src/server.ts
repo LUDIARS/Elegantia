@@ -30,7 +30,7 @@ async function main(): Promise<void> {
     server.close(); await database.close(); await logger.close();
     throw new Error('HTTP/1 server required');
   }
-  const socket = attachSocket({ server, origins: config.origins, maxPayloadBytes: config.maxPayloadBytes,
+  const socket = attachSocket({ server, origins: config.origins, hosts: config.hosts, maxPayloadBytes: config.maxPayloadBytes,
     maxImportRecords: config.maxImportRecords, repository, catalog, logger, now: () => new Date() });
   let stopping = false;
   async function shutdown(code: number): Promise<void> {

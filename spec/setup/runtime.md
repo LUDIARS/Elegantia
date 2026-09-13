@@ -31,6 +31,9 @@ npm run typecheckはscripts/prepare-typecheck.mjsでTypeScriptと共有ログ依
 事前にConcordia testing claim、終了時にreleaseを行う。worktreeからサービスを起動しない。
 excubitor.catalog.yamlがポート17860と起動コマンドを所有する。
 既定の待受は127.0.0.1であり、公開ネットワークへ直接公開しない。
+Excubitorが注入するLUDIARS_ALLOWED_HOSTSをHost許可へ追加する。
+カンマ区切りのホスト名に対応し、先頭ドットはドメイン自身とサブドメインを許可する。
+Originの許可はELEGANTIA_VIEWER_ORIGINSで別途完全一致を指定する。
 
 SIGINT/SIGTERMでWebSocket、HTTP、SQLite接続、ログを閉じる。
 ヘルスチェックはDBへの問い合わせを含む。

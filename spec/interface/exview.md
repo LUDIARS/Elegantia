@@ -23,7 +23,11 @@ ELEGANTIA_VIEWER_ORIGINSに完全一致のOriginだけを列挙する。
 カタログの初期値はローカルExView（所有カタログで確認した17334）と既存のweb/exiv公開Origin。
 ExView側の変更時はこの設定を更新する。転送時もOriginを偽装せずサーバで照合する。
 CSPのframe-ancestorsはselfと設定されたViewer Originのみ許可する。
-サービス本体のHostは自身のループバックに限定する。
+Hostは自身のループバックとExcubitorが注入するLUDIARS_ALLOWED_HOSTSで判定する。
+共通設定はカンマ区切りのホスト名。先頭ドットはそのドメインとサブドメインを許可する。
+HTTPとWebSocketで同じHost許可を使う。Hostの許可はOriginの許可へ自動展開しない。
+WebSocketのOrigin完全一致と接続元ループバック制限を維持する。
+参考: Excubitor/frontend/config.ts、Excubitor/spec/faq/allowedhosts-global-env.md。
 
 ## 反映
 

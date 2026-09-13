@@ -2,6 +2,7 @@ import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { parse } from 'yaml';
 import { z } from 'zod';
+import { injectedHosts } from './allowed-hosts.js';
 
 const configSchema = z.object({
   host: z.literal('127.0.0.1'), access: z.literal('loopback-and-exview'),
@@ -28,7 +29,8 @@ export async function loadConfig(root: string, env: NodeJS.ProcessEnv): Promise<
     const url = new URL(origin);
     if (url.origin !== origin || !['http:', 'https:'].includes(url.protocol)) throw new Error('Invalid Viewer origin');
   }
-  const hosts = new Set(['http://127.0.0.1:' + port, 'http://localhost:' + port]);
+  const localOrigins = ['http://127.0.0.1:' + port, 'http://localhost:' + port];
+  const hosts = new Set(['127.0.0.1:' + port, 'localhost:' + port, ...injectedHosts(env.LUDIARS_ALLOWED_HOSTS)]);
   return { ...config, databasePath: resolve(root, databasePath), root, port, hosts, viewerOrigins,
-    origins: new Set([...hosts, ...viewerOrigins]) };
+    origins: new Set([...localOrigins, ...viewerOrigins]) };
 }
