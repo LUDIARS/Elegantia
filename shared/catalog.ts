@@ -6,6 +6,7 @@ export const criterionSchema = z.object({
   categoryId: categorySchema,
   revision: z.number().int().positive(),
   title: z.string().min(1),
+  documentPath: z.string().regex(/^quality\/items\/[CALGE]-[^/\\\x00-\x1f]+\/[CALGE]\d{2}-[^/\\\x00-\x1f]+\.md$/),
   implementation: z.string().min(1),
   experience: z.string().min(1),
   requiredCriteria: z.string().min(1),

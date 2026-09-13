@@ -10,7 +10,7 @@ status: implemented
 
 ## 正本
 
-1項目1ファイル、`spec/quality/items/C01.md` のように安定IDで配置する。
+1項目1ファイル、`quality/items/C-共通品質/C01-即時の受付.md` のようにカテゴリ別ディレクトリとID・タイトルを含む名前で配置する。IDはfrontmatterで維持し、ファイル名には実際の項目タイトルを使う。
 AIFormatのOKFに合わせてYAML frontmatterにtitle、type: feature、service: elegantia、domain、status、tagsを置く。
 `x-elegantia` にid、category、revisionを持たせる。statusは文書のライフサイクルであり試験の判定ではない。
 本文H1はIDと名称、H2は次の5つだけをこの順序で必須とする。
@@ -29,8 +29,9 @@ AIFormatのOKFに合わせてYAML frontmatterにtitle、type: feature、service:
 
 scripts/render-catalog.mjsが全個別MDを読み、書式・ID・見出し順・件数を確認して生成する。
 data/catalog.jsonはWeb配信のための派生データで、別の編集正本にしない。
-spec/quality/index.mdは分野別リンク一覧、catalog.mdは全項目を5見出しで並べた総覧。
+quality/index.mdは分野別リンク一覧、catalog.mdは全項目を5見出しで並べた総覧。
 カタログ版は基底版と全内容のSHA-256短縮ハッシュで識別する。
+配信用documentPathはハッシュから除く。配置・改名のみでは品質版を変えず、既存の試験結果との対応を維持する。
 生成はbuild時の明示処理。HTTP GETでは書込みを行わない。
 
 ## Web

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState, type FormEvent } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { Library } from './Library.js';
 import type { Catalog } from '../../shared/catalog.js';
 import type { Overview } from '../../shared/coverage.js';
 import { contextSchema, verdictLabels } from '../../shared/results.js';
@@ -72,6 +73,7 @@ export function App() {
           ['未達', overview?.counts.failed], ['記録なし', overview?.counts.none], ['過去条件のみ', overview?.counts.historical_only]].map(([label, count]) => <div key={label}><span>{label}</span><strong>{count ?? '—'}</strong></div>)}
       </section>
       <Policy />
+      <Library />
       <div className="tools"><label className="search">基準を検索<input value={search} onChange={e => setSearch(e.target.value)} placeholder="入力遅延、照明、カメラ…" /></label>
         <label>結果で絞る<select value={filter} disabled={!overview} onChange={e => setFilter(e.target.value)}><option value="">すべて</option>
           {Object.entries(presenceLabels).map(([key, label]) => <option value={key} key={key}>{label}</option>)}

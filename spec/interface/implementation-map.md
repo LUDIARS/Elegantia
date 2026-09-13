@@ -18,8 +18,8 @@ status: implemented
 | `shared/results.ts` | 結果・文脈・証拠の入力制約 | [データ](../data/schema.md) |
 | `shared/coverage.ts` | 条件一致と過去履歴・最新判定 | [機能](../feature/result-tracking.md) |
 | `src/results/validate.ts` | カタログ版・ID・未来時刻の確認 | [機能](../feature/result-tracking.md) |
-| `src/db/schema.ts` | Drizzleのテーブル定義 | [データ](../data/schema.md) |
-| `src/db/connect.ts` | 接続プール・起動時スキーマ適用・切断 | [運用](../setup/runtime.md) |
+| `src/db/schema.ts` | SQLite結果行の型定義 | [データ](../data/schema.md) |
+| `src/db/connect.ts` | SQLite接続・起動時スキーマ適用・切断 | [運用](../setup/runtime.md) |
 | `src/db/repository.ts` | 排他追記・冪等性・履歴照会 | [データ](../data/schema.md) |
 | `shared/protocol.ts` | module_requestの形式 | [API](api.md) |
 | `src/http/app.ts` | 読取りHTTP・静的配信・共通応答ヘッダ | [API](api.md) |

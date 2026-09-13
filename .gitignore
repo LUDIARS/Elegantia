@@ -7,3 +7,7 @@ web/dist/
 logs/
 .anatomia/
 *.tsbuildinfo
+.local/
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm

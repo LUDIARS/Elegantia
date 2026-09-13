@@ -9,6 +9,7 @@ import { ResultRepository } from '../db/repository.js';
 import { allowedHost } from './access.js';
 import { clientError } from './errors.js';
 import type { ServerConfig } from '../runtime/config.js';
+import { libraryRouter } from './library.js';
 
 export interface AppDependencies {
   catalog: Catalog; repository: ResultRepository; config: ServerConfig; logger: Writer;
@@ -37,12 +38,16 @@ export function createApp(deps: AppDependencies): Hono {
     catch { return c.json({ service: 'elegantia', status: 'database_unavailable' }, 503); }
   });
   app.get('/api/catalog', c => c.json(catalog));
-  app.get('/api/policy', async c => c.json({ markdown: await readFile(config.root + '/spec/quality/assessment-policy.md', 'utf8') }));
+  app.route('/api/library', libraryRouter(config.root));
+  app.get('/api/policy', async c => c.json({ markdown: await readFile(config.root + '/quality/assessment-policy.md', 'utf8') }));
   app.get('/api/items/:id/document', async c => {
     const id = c.req.param('id');
-    if (!catalog.items.some(item => item.id === id)) return c.json({ error: 'Unknown item' }, 404);
-    c.header('Content-Disposition', 'attachment; filename="' + id + '.md"');
-    return c.text(await readFile(config.root + '/spec/quality/items/' + id + '.md', 'utf8'));
+    const item = catalog.items.find(item => item.id === id);
+    if (!item) return c.json({ error: 'Unknown item' }, 404);
+    const filename = item.documentPath.slice(item.documentPath.lastIndexOf('/') + 1);
+    const encodedFilename = encodeURIComponent(filename).replace(/['()*]/g, char => '%' + char.charCodeAt(0).toString(16).toUpperCase());
+    c.header('Content-Disposition', 'attachment; filename="' + id + '.md"; filename*=UTF-8\'\'' + encodedFilename);
+    return c.text(await readFile(config.root + '/' + item.documentPath, 'utf8'));
   });
   app.get('/api/catalog.md', async c => {
     c.header('Content-Disposition', 'attachment; filename="elegantia-catalog.md"');

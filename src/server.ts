@@ -21,8 +21,7 @@ async function main(): Promise<void> {
   const catalog = await loadCatalog(config.catalogPath);
   const logger = createLogger(resolve(root, config.logsDir));
   let database: Awaited<ReturnType<typeof connectDatabase>>;
-  try { database = await connectDatabase(config.databaseUrl, resolve(root, 'migrations/001_results.sql'),
-    () => logger.write({ level: 'error', msg: 'Database pool connection failed' })); }
+  try { database = await connectDatabase(config.databasePath, resolve(root, 'migrations/001_results.sql')); }
   catch (error) { logger.write({ level: 'error', msg: 'Database initialization failed' }); await logger.close(); throw error; }
   const repository = new ResultRepository(database.db, () => new Date());
   const app = createApp({ config, catalog, repository, logger, ping: database.ping });

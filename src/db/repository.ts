@@ -1,13 +1,9 @@
-import { and, desc, eq, lt, sql } from 'drizzle-orm';
-import type { NodePgDatabase } from 'drizzle-orm/node-postgres';
-import { resultInputSchema, type EvaluationContext, type HistoryPage, type ResultInput, type TestResult } from '../../shared/results.js';
-import * as schema from './schema.js';
-
+import type { DatabaseSync } from 'node:sqlite';
+import { contextSchema, resultInputSchema, type EvaluationContext, type HistoryPage, type ResultInput, type TestResult } from '../../shared/results.js';
+import type { ResultRow } from './schema.js';
 export class IdempotencyConflict extends Error {}
-type ResultRow = typeof schema.testResults.$inferSelect;
 function toResult(row: ResultRow): TestResult {
-  return { ...resultInputSchema.parse(row.payload), sequence: row.sequence,
-    recordedAt: new Date(row.recordedAt).toISOString() };
+  return { ...resultInputSchema.parse(JSON.parse(row.payload)), sequence: row.sequence, recordedAt: row.recorded_at };
 }
 function canonical(value: unknown): string {
   if (Array.isArray(value)) return '[' + value.map(canonical).join(',') + ']';
@@ -17,63 +13,58 @@ function canonical(value: unknown): string {
   return JSON.stringify(value);
 }
 export class ResultRepository {
-  constructor(private readonly db: NodePgDatabase<typeof schema>, private readonly now: () => Date) {}
-
+  constructor(private readonly db: DatabaseSync, private readonly now: () => Date) {}
   async contexts(): Promise<EvaluationContext[]> {
-    const rows = await this.db.selectDistinct({
-      context: sql<EvaluationContext>`payload->'context'`,
-    }).from(schema.testResults);
-    return rows.map(row => row.context);
+    const rows = this.db.prepare(`SELECT DISTINCT product,
+      json_extract(payload, '$.context.build') AS build,
+      json_extract(payload, '$.context.environment') AS environment FROM test_results
+      ORDER BY product, build, environment`).all();
+    return rows.map(row => contextSchema.parse(row));
   }
-
   async latestForProduct(product: string): Promise<TestResult[]> {
-    const table = schema.testResults;
-    const build = sql<string>`payload->'context'->>'build'`;
-    const environment = sql<string>`payload->'context'->>'environment'`;
-    const revision = sql<string>`payload->>'itemRevision'`;
-    const catalog = sql<string>`payload->>'catalogVersion'`;
-    const rows = await this.db.selectDistinctOn([table.itemId, build, environment, revision, catalog])
-      .from(table).where(eq(table.product, product))
-      .orderBy(table.itemId, build, environment, revision, catalog, desc(table.testedAt), desc(table.sequence));
+    const rows = this.db.prepare(`SELECT sequence, recorded_at, payload FROM (
+      SELECT sequence, recorded_at, payload, ROW_NUMBER() OVER (
+        PARTITION BY item_id, json_extract(payload, '$.context.build'),
+          json_extract(payload, '$.context.environment'), json_extract(payload, '$.itemRevision'),
+          json_extract(payload, '$.catalogVersion') ORDER BY tested_at DESC, sequence DESC
+      ) AS position FROM test_results WHERE product = ?
+    ) WHERE position = 1 ORDER BY sequence`).all(product) as unknown as ResultRow[];
     return rows.map(toResult);
   }
-
   async history(product: string, itemId: string, cursor?: number): Promise<HistoryPage> {
-    const table = schema.testResults;
-    const where = and(eq(table.product, product), eq(table.itemId, itemId), cursor ? lt(table.sequence, cursor) : undefined);
-    const rows = await this.db.select().from(table).where(where).orderBy(desc(table.sequence)).limit(51);
+    const rows = this.db.prepare(`SELECT sequence, recorded_at, payload FROM test_results
+      WHERE product = ? AND item_id = ? ${cursor === undefined ? '' : 'AND sequence < ?'}
+      ORDER BY sequence DESC LIMIT 51`).all(...(cursor === undefined ? [product, itemId] : [product, itemId, cursor])) as unknown as ResultRow[];
     return { results: rows.slice(0, 50).map(toResult), nextCursor: rows.length > 50 ? rows[49].sequence : null };
   }
-
   async exportContext(context: EvaluationContext): Promise<ResultInput[]> {
-    const rows = await this.db.select().from(schema.testResults).where(and(
-      eq(schema.testResults.product, context.product),
-      sql`payload->'context'->>'build' = ${context.build}`,
-      sql`payload->'context'->>'environment' = ${context.environment}`,
-    )).orderBy(schema.testResults.sequence);
-    return rows.map(row => resultInputSchema.parse(row.payload));
+    const rows = this.db.prepare(`SELECT payload FROM test_results WHERE product = ?
+      AND json_extract(payload, '$.context.build') = ? AND json_extract(payload, '$.context.environment') = ?
+      ORDER BY sequence`).all(context.product, context.build, context.environment) as unknown as Pick<ResultRow, 'payload'>[];
+    return rows.map(row => resultInputSchema.parse(JSON.parse(row.payload)));
   }
-
   async append(results: ResultInput[]): Promise<number> {
-    return this.db.transaction(async tx => {
+    // No await inside the transaction: requests cannot share this connection's transaction.
+    this.db.exec('BEGIN IMMEDIATE');
+    try {
       let created = 0;
-      // Serialize short append transactions, including retries and overlapping imports.
-      await tx.execute(sql`SELECT pg_advisory_xact_lock(hashtext('elegantia-results-append'))`);
-      const ordered = [...results].sort((a, b) => a.requestId.localeCompare(b.requestId));
-      for (const result of ordered) {
-        const [existing] = await tx.select().from(schema.testResults).where(eq(schema.testResults.requestId, result.requestId));
+      const find = this.db.prepare('SELECT payload FROM test_results WHERE request_id = ?');
+      const insert = this.db.prepare(`INSERT INTO test_results
+        (request_id, product, item_id, tested_at, recorded_at, payload) VALUES (?, ?, ?, ?, ?, ?)`);
+      for (const raw of [...results].sort((a, b) => a.requestId.localeCompare(b.requestId))) {
+        const result = resultInputSchema.parse(raw);
+        const existing = find.get(result.requestId) as { payload: string } | undefined;
         if (existing) {
-          if (canonical(existing.payload) !== canonical(result))
+          if (canonical(JSON.parse(existing.payload)) !== canonical(result))
             throw new IdempotencyConflict('同じ送信IDに異なる結果が登録されています');
           continue;
         }
-        await tx.insert(schema.testResults).values({
-          requestId: result.requestId, product: result.context.product, itemId: result.itemId,
-          testedAt: result.testedAt, recordedAt: this.now().toISOString(), payload: result,
-        });
+        insert.run(result.requestId, result.context.product, result.itemId,
+          new Date(result.testedAt).toISOString(), this.now().toISOString(), JSON.stringify(result));
         created++;
       }
+      this.db.exec('COMMIT');
       return created;
-    });
+    } catch (error) { this.db.exec('ROLLBACK'); throw error; }
   }
 }

@@ -4,6 +4,7 @@
   "presetRules": [],
   "templateRules": [],
   "membership": [
+    { "pathPattern": "(^|/)(shared/library\\.ts|scripts/render-library\\.mjs|src/http/library\\.ts|web/src/Library\\.tsx)$" },
     {
       "pathPattern": "(^|/)shared/catalog\\.ts$"
     },
@@ -15,6 +16,7 @@
     }
   ],
   "specRefs": [
+    "spec/feature/content-library.md",
     "spec/ux/product.md",
     "spec/feature/result-tracking.md"
   ]

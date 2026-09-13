@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 1,
+  "entries": [
+    {
+      "id": "template-1",
+      "kind": "advisory",
+      "title": "プログラム設計のアドバイザリー",
+      "path": "advisory/program/状態と非同期処理の設計.md",
+      "summary": "任意採用の指針です。未採用を品質未達や試験失敗として数えません。採用理由と不採用理由を同じ重みで残します。",
+      "qualityIds": [],
+      "ludusReferences": []
+    },
+    {
+      "id": "template-2",
+      "kind": "advisory",
+      "title": "企画設計のアドバイザリー",
+      "path": "advisory/planning/企画の核と体験の優先順位.md",
+      "summary": "企画の選択肢を良くするための任意指針です。ジャンルや制作制約に合わなければ不採用にできます。",
+      "qualityIds": [],
+      "ludusReferences": []
+    },
+    {
+      "id": "template-3",
+      "kind": "advisory",
+      "title": "アドバイザリー採否テンプレート",
+      "path": "advisory/templates/設計指針の採否記録.md",
+      "summary": "この記録は推奨設計の採否を検討するもので、合格要件ではありません。",
+      "qualityIds": [],
+      "ludusReferences": []
+    },
+    {
+      "id": "template-4",
+      "kind": "ux",
+      "title": "目指す体験から逆引きするUXテンプレート",
+      "path": "ux/templates/目指す体験から逆引きする.md",
+      "summary": "体験ID：",
+      "qualityIds": [],
+      "ludusReferences": []
+    },
+    {
+      "id": "template-5",
+      "kind": "ux",
+      "title": "アクションで意図した操作が届く",
+      "path": "ux/examples/アクションで意図した操作が届く.md",
+      "summary": "UX-ACTION-INTENT：攻撃から回避へ移るとき、少し早く押した入力も意図どおりに届き、自分が操作していると感じる。",
+      "qualityIds": [
+        "C01",
+        "A01",
+        "A02",
+        "A03"
+      ],
+      "ludusReferences": [
+        {
+          "repository": "LUDIARS/Ludus",
+          "revision": "ccd38ccbb55d8871cffb40198cfa8beb62af1b42",
+          "path": "spec/data/game-template/action/ux/player_experience.md",
+          "genre": "action",
+          "featureIds": [
+            "input-buffer",
+            "combo-system",
+            "dodge-roll"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "template-6",
+      "kind": "ux",
+      "title": "待たされず次の判断へ進める",
+      "path": "ux/examples/待たされず次の判断へ進める.md",
+      "summary": "UX-WEB-FLOW：処理を依頼した利用者が、受け付けられたか迷わず、必要な情報を一か所で確認し、次にできることを選べる。",
+      "qualityIds": [
+        "C01",
+        "C02",
+        "C04"
+      ],
+      "ludusReferences": []
+    },
+    {
+      "id": "template-7",
+      "kind": "quality",
+      "title": "品質項目テンプレート",
+      "path": "quality/templates/品質項目の五部構成.md",
+      "summary": "品質基準を追加するときの下書きです。採番とカテゴリ・revisionを確定した後、itemsの対応カテゴリへ保存します。このテンプレート自体は180項目に数えません。",
+      "qualityIds": [],
+      "ludusReferences": []
+    }
+  ]
+}

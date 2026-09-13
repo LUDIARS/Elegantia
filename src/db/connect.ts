@@ -1,36 +1,24 @@
-import { readFile } from 'node:fs/promises';
-import { Pool } from 'pg';
-import { drizzle, type NodePgDatabase } from 'drizzle-orm/node-postgres';
-import * as schema from './schema.js';
-
+import { mkdir, readFile } from 'node:fs/promises';
+import { dirname } from 'node:path';
+import { DatabaseSync } from 'node:sqlite';
 export interface Database {
-  db: NodePgDatabase<typeof schema>;
+  db: DatabaseSync;
   ping(): Promise<void>;
   close(): Promise<void>;
 }
-export async function connectDatabase(connectionString: string, migrationPath: string, onError: () => void): Promise<Database> {
-  const pool = new Pool({ connectionString, max: 5, connectionTimeoutMillis: 5000,
-    idleTimeoutMillis: 30000, statement_timeout: 10000 });
-  pool.on('error', onError);
+export async function connectDatabase(filename: string, migrationPath: string): Promise<Database> {
+  const migration = await readFile(migrationPath, 'utf8');
+  await mkdir(dirname(filename), { recursive: true });
+  const db = new DatabaseSync(filename);
   try {
-    const migration = await readFile(migrationPath, 'utf8');
-    const client = await pool.connect();
-    try {
-      await client.query('BEGIN');
-      await client.query("SELECT pg_advisory_xact_lock(hashtext('elegantia-schema'))");
-      await client.query(migration);
-      await client.query('COMMIT');
-    } catch (error) {
-      await client.query('ROLLBACK');
-      throw error;
-    } finally { client.release(); }
+    db.exec('PRAGMA busy_timeout=5000; PRAGMA journal_mode=WAL; PRAGMA synchronous=FULL; PRAGMA foreign_keys=ON;');
+    db.exec('BEGIN IMMEDIATE');
+    try { db.exec(migration); db.exec('COMMIT'); }
+    catch (error) { db.exec('ROLLBACK'); throw error; }
     return {
-      db: drizzle(pool, { schema }),
-      async ping(): Promise<void> { await pool.query('SELECT 1'); },
-      async close(): Promise<void> { await pool.end(); },
+      db,
+      async ping(): Promise<void> { db.prepare('SELECT 1').get(); },
+      async close(): Promise<void> { db.close(); },
     };
-  } catch (error) {
-    await pool.end();
-    throw error;
-  }
+  } catch (error) { db.close(); throw error; }
 }

@@ -1,0 +1,7 @@
+.library { margin: 1.5rem 0; padding: 1.25rem; border: 1px solid #444; border-radius: .75rem; }
+.library summary { cursor: pointer; font-weight: 600; }
+.library .tools { flex-wrap: wrap; }
+.library .tools label:first-child { flex: 1; min-width: min(100%, 18rem); }
+.library-entry { border-top: 1px solid #444; padding: 1rem 0; }
+.library-text { overflow-wrap: anywhere; }
+.library-text p { white-space: pre-wrap; margin: .25rem 0; }
