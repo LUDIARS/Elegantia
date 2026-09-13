@@ -21,4 +21,4 @@ services:
       enabled: true
       entry_path: /
     env:
-      ELEGANTIA_VIEWER_ORIGINS: http://127.0.0.1:17334,http://localhost:17334,https://exiv.ai-run-do.com,https://web.ai-run-do.com
+      ELEGANTIA_VIEWER_ORIGINS: http://127.0.0.1:17334,http://localhost:17334,https://exiv.ai-run-do.com,https://web.ai-run-do.com,https://el.ai-run-do.com

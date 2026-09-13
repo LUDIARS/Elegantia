@@ -20,6 +20,9 @@ Elegantiaはユーザー単位の認証・権限分離を提供せず、許可�
 入口側のAccess保護がない状態でインターネットへ公開しない。
 
 ELEGANTIA_VIEWER_ORIGINSに完全一致のOriginだけを列挙する。
+Tunnel直結のhttps://el.ai-run-do.comも同じ許可設定へ明示的に登録する。
+module script取得時のOriginとWebSocketのOriginもこの設定で照合する。
+Hostの共通許可だけでは新しい公開URLのOriginは許可されない。
 カタログの初期値はローカルExView（所有カタログで確認した17334）と既存のweb/exiv公開Origin。
 ExView側の変更時はこの設定を更新する。転送時もOriginを偽装せずサーバで照合する。
 CSPのframe-ancestorsはselfと設定されたViewer Originのみ許可する。
