@@ -1,12 +1,12 @@
 import { z } from 'zod';
 
-export const categorySchema = z.enum(['C', 'A', 'L', 'G', 'E']);
+export const categorySchema = z.enum(['C', 'D', 'A', 'P', 'L', 'G', 'E']);
 export const criterionSchema = z.object({
-  id: z.string().regex(/^[CALGE]\d{2}$/),
+  id: z.string().regex(/^[CDAPLGE]\d{2}$/),
   categoryId: categorySchema,
   revision: z.number().int().positive(),
   title: z.string().min(1),
-  documentPath: z.string().regex(/^quality\/items\/[CALGE]-[^/\\\x00-\x1f]+\/[CALGE]\d{2}-[^/\\\x00-\x1f]+\.md$/),
+  documentPath: z.string().regex(/^quality\/items\/[CDAPLGE]-[^/\\\x00-\x1f]+\/[CDAPLGE]\d{2}-[^/\\\x00-\x1f]+\.md$/),
   implementation: z.string().min(1),
   experience: z.string().min(1),
   requiredCriteria: z.string().min(1),

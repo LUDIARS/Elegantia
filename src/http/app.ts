@@ -27,7 +27,7 @@ export function createApp(deps: AppDependencies): Hono {
     if (!allowedHost(c.req.header('host'), config.hosts)) return c.json({ error: 'Host not allowed' }, 403);
     const origin = c.req.header('origin');
     if (origin && !config.origins.has(origin)) return c.json({ error: 'Origin not allowed' }, 403);
-    const isPublicContent = publicPaths.has(c.req.path) || /^\/api\/items\/[CALGE]\d{2}\/document$/.test(c.req.path)
+    const isPublicContent = publicPaths.has(c.req.path) || /^\/api\/items\/[CDAPLGE]\d{2}\/document$/.test(c.req.path)
       || /^\/api\/library\/[^/]+\/document$/.test(c.req.path);
     if (c.req.path.startsWith('/api/') && !isPublicContent
       && !isLocalAccess(config.mode, config.port, c.req.header('host'), origin)) return c.json({ error: 'Local tool only' }, 403);

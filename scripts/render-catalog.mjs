@@ -26,7 +26,7 @@ for (const { directory, file, category } of files) {
   if (!match) throw new Error(file + ': OKF frontmatter missing');
   const front = parse(match[1]); const extension = front['x-elegantia'];
   if (front.type !== 'feature' || front.service !== 'elegantia' || !extension ||
-      !/^[CALGE]\d{2}$/.test(extension.id) || typeof front.title !== 'string' ||
+      !/^[CDAPLGE]\d{2}$/.test(extension.id) || typeof front.title !== 'string' ||
       extension.category !== category.id || extension.id[0] !== category.id ||
       file !== extension.id + '-' + safeName(front.title) + '.md' ||
       !Number.isSafeInteger(extension.revision) || extension.revision < 1) throw new Error(file + ': invalid OKF metadata');

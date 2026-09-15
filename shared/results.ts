@@ -20,7 +20,7 @@ const evidenceSchema = z.object({
 export const resultInputSchema = z.object({
   requestId: z.string().uuid(),
   context: contextSchema,
-  itemId: z.string().regex(/^[CALGE]\d{2}$/),
+  itemId: z.string().regex(/^[CDAPLGE]\d{2}$/),
   itemRevision: z.number().int().positive(),
   catalogVersion: z.string().min(1).max(100),
   verdict: verdictSchema,

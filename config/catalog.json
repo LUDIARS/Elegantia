@@ -1,6 +1,6 @@
 {
   "id": "elegantia-quality",
-  "version": "2026-09-11.1",
+  "version": "2026-09-16.1",
   "title": "Elegantia 品質達成カタログ",
   "description": "各項目の実装内容・達成するUX・必須要件・追加要件を管理する。カタログの存在は試験実施や合格を意味しない。",
   "categories": [
@@ -10,9 +10,19 @@
       "count": 30
     },
     {
+      "id": "D",
+      "name": "ゲーム全般",
+      "count": 20
+    },
+    {
       "id": "A",
       "name": "アクションゲーム",
       "count": 45
+    },
+    {
+      "id": "P",
+      "name": "キャラクタープレゼンス",
+      "count": 20
     },
     {
       "id": "L",

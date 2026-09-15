@@ -60,7 +60,7 @@ export function App() {
   return <div className="shell">
     <header><a className="brand" href={servicePath('/')}>ELEGANTIA<span>品質を、証拠で磨く。</span></a><span className="edition">QUALITY OBSERVATORY / 01</span></header>
     <main><section className="intro"><p className="eyebrow">審美眼を、共有できる基準へ。</p><h1>その体験は、<br/><em>エレガントか。</em></h1>
-      <p>操作の一瞬から、3DCG作品全体の印象まで。180の観点で品質と試験の証拠を見渡す。</p></section>
+      <p>操作の一瞬から、3DCG作品全体の印象まで。{catalog?.items.length ?? '—'}の観点で品質と試験の証拠を見渡す。</p></section>
       <p className="notice">調査分析はローカル環境のLLMで実行します。サーバから実行はできません<br/>
         <a href="https://github.com/LUDIARS/Elegantia">リポジトリでローカルツールの利用方法を見る →</a></p>
       {isLocal && <LocalProjects project={project} refresh={refresh} onProject={value => { setProject(value); setParams({}); setOverview(undefined); setFilter(''); }}
@@ -78,7 +78,7 @@ export function App() {
           {Object.entries(presenceLabels).map(([key, label]) => <option value={key} key={key}>{label}</option>)}
           {Object.entries(verdictLabels).map(([key, label]) => <option value={key} key={key}>{label}</option>)}
         </select></label>}<button onClick={reload}>更新</button></div>
-      <nav className="categories" aria-label="品質分野"><button aria-pressed={!category} onClick={() => setCategory('')}>すべて · 180</button>
+      <nav className="categories" aria-label="品質分野"><button aria-pressed={!category} onClick={() => setCategory('')}>すべて · {catalog?.items.length ?? '—'}</button>
         {catalog?.categories.map(c => <button aria-pressed={category === c.id} key={c.id} onClick={() => setCategory(c.id)}>{c.name} · {c.count}</button>)}</nav>
       <div className="workspace"><section className="catalog" aria-label="品質基準一覧"><p className="muted">{visible.length} 項目</p>
         {visible.map(row => { const coverage = overview?.items.find(c => c.criterion.id === row.id); return <button className={'criterion ' + (selected === row.id ? 'selected' : '')} key={row.id} onClick={() => setSelected(row.id)} aria-expanded={selected === row.id}>

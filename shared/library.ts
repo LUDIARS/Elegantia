@@ -5,7 +5,7 @@ export const librarySchema = z.object({
     id: z.string().regex(/^template-\d+$/), kind: z.enum(['advisory', 'quality', 'ux']),
     title: z.string().min(1), summary: z.string().min(1),
     path: z.string().regex(/^(advisory|quality\/templates|ux)\/.+\.md$/).refine(value => !value.includes('..') && !/[\\\x00-\x1f]/.test(value)),
-    qualityIds: z.array(z.string().regex(/^[CALGE]\d{2}$/)),
+    qualityIds: z.array(z.string().regex(/^[CDAPLGE]\d{2}$/)),
     ludusReferences: z.array(z.object({
       repository: z.literal('LUDIARS/Ludus'), revision: z.string().regex(/^[a-f0-9]{40}$/),
       path: z.string().regex(/^spec\/data\/game-template\/[a-z0-9_/-]+\.md$/).refine(value => !value.includes('..')),

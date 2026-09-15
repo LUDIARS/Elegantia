@@ -90,7 +90,7 @@
       "path": "quality/templates/品質項目の五部構成.md",
       "qualityIds": [],
       "ludusReferences": [],
-      "markdown": "---\ntitle: \"品質項目テンプレート\"\ntype: guide\nservice: elegantia\nstatus: draft\n---\n\n# 品質項目テンプレート\n\n## 用途\n品質基準を追加するときの下書きです。採番とカテゴリ・revisionを確定した後、itemsの対応カテゴリへ保存します。このテンプレート自体は180項目に数えません。\n## OKF記述例\n以下のfrontmatterと5見出しを使います。ポイントとtitleを一致させます。\n```markdown\n---\ntitle: \"項目タイトル\"\ntype: feature\nservice: elegantia\ndomain: quality-catalog\nstatus: planned\ntags: [quality, C]\nx-elegantia:\n  id: C00\n  category: C\n  revision: 1\n---\n# C00 項目タイトル\n## ポイント\n項目タイトル\n## 実装内容\n対象とする実装。\n## 達成しうるUX\n利用者が得られる体験。\n## 品質達成要件\n対象条件、手順、測定・観察、合格境界、証拠。\n## 追加達成要件\n必須達成後に目指す内容。\n```\n## 運用\nC00は記入例です。未使用の安定IDを割り当て、既存IDを再利用しません。内容を変更した場合はrevisionを上げます。移動と改名だけではrevisionを上げません。\n"
+      "markdown": "---\ntitle: \"品質項目テンプレート\"\ntype: guide\nservice: elegantia\nstatus: draft\n---\n\n# 品質項目テンプレート\n\n## 用途\n品質基準を追加するときの下書きです。採番とカテゴリ・revisionを確定した後、itemsの対応カテゴリへ保存します。このテンプレート自体は品質項目数に数えません。\n## OKF記述例\n以下のfrontmatterと5見出しを使います。ポイントとtitleを一致させます。\n```markdown\n---\ntitle: \"項目タイトル\"\ntype: feature\nservice: elegantia\ndomain: quality-catalog\nstatus: planned\ntags: [quality, C]\nx-elegantia:\n  id: C00\n  category: C\n  revision: 1\n---\n# C00 項目タイトル\n## ポイント\n項目タイトル\n## 実装内容\n対象とする実装。\n## 達成しうるUX\n利用者が得られる体験。\n## 品質達成要件\n対象条件、手順、測定・観察、合格境界、証拠。\n## 追加達成要件\n必須達成後に目指す内容。\n```\n## 運用\nC00は記入例です。未使用の安定IDを割り当て、既存IDを再利用しません。内容を変更した場合はrevisionを上げます。移動と改名だけではrevisionを上げません。\n"
     }
   ]
 }

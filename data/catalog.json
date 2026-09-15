@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "elegantia-quality",
-  "version": "2026-09-11.1+939596d5f3cb",
+  "version": "2026-09-16.1+32d3b646b701",
   "title": "Elegantia 品質達成カタログ",
   "description": "各項目の実装内容・達成するUX・必須要件・追加要件を管理する。カタログの存在は試験実施や合格を意味しない。",
   "categories": [
@@ -11,9 +11,19 @@
       "count": 30
     },
     {
+      "id": "D",
+      "name": "ゲーム全般",
+      "count": 20
+    },
+    {
       "id": "A",
       "name": "アクションゲーム",
       "count": 45
+    },
+    {
+      "id": "P",
+      "name": "キャラクタープレゼンス",
+      "count": 20
     },
     {
       "id": "L",
@@ -361,6 +371,226 @@
       "requiredCriteria": "各体験軸3以上、核の場面4。指摘件数減少だけで合格させない",
       "additionalCriteria": "指摘を直した後に作品らしさと継続意欲も向上",
       "documentPath": "quality/items/C-共通品質/C30-体験価値の検証.md"
+    },
+    {
+      "id": "D01",
+      "categoryId": "D",
+      "revision": 1,
+      "title": "体験の核の宣言",
+      "implementation": "製品の上位目的と核となる場面を正本文書に定義し、機能・演出・課金の判断根拠として参照する",
+      "experience": "何のための作品かがプレイの隅々から伝わる",
+      "requiredCriteria": "上位目的と核の場面が正本に1つ定義され、主要機能ごとに寄与する目的IDを記録する。目的と矛盾する機能0件。核の場面をH/Vで4と判定する",
+      "additionalCriteria": "目的を知らない初見者が核の場面を言い当てられ、削った機能の理由も同じ目的で説明できる",
+      "documentPath": "quality/items/D-ゲーム全般/D01-体験の核の宣言.md"
+    },
+    {
+      "id": "D02",
+      "categoryId": "D",
+      "revision": 1,
+      "title": "コアループの成立",
+      "implementation": "目的→行動→結果→次の目的の一周を定義し、導入で最初の一周を通す",
+      "experience": "何をすれば何が起きるかが体で分かり、次をやりたくなる",
+      "requiredCriteria": "初見者が説明なしで一周を完了する率を対象ユーザーで観察し、離脱理由を全件記録する。一周の途中で行き止まりになる状態0件",
+      "additionalCriteria": "一周ごとに手段や状況が変わり、同じ行動が新しい意味を持つ",
+      "documentPath": "quality/items/D-ゲーム全般/D02-コアループの成立.md"
+    },
+    {
+      "id": "D03",
+      "categoryId": "D",
+      "revision": 1,
+      "title": "現在の目標の可視性",
+      "implementation": "現在の目標・進捗・達成条件を1画面で示す。隠す場合は発見の設計として意図を記録する",
+      "experience": "今なにをすればよいか迷わない",
+      "requiredCriteria": "「次に何をするか分からない」観察を初見・習熟後の各セッションで記録し、意図しない迷い時間の中央値を目標値以下に収める。目標が消える・矛盾する遷移0件",
+      "additionalCriteria": "目標を提示しなくても場面の作りだけで次の行動が読める",
+      "documentPath": "quality/items/D-ゲーム全般/D03-現在の目標の可視性.md"
+    },
+    {
+      "id": "D04",
+      "categoryId": "D",
+      "revision": 1,
+      "title": "進行の実感",
+      "implementation": "蓄積・成長・解放を記録し、直前との差を比較できる形で見せる",
+      "experience": "続けた分だけ世界や自分が変わったと感じる",
+      "requiredCriteria": "主要な進行値が保存・表示され、直前状態との差を確認できる。進行が無音で失われる・巻き戻る事象0件",
+      "additionalCriteria": "数値の増加以外に、見た目・振る舞い・行ける場所の変化として進行が現れる",
+      "documentPath": "quality/items/D-ゲーム全般/D04-進行の実感.md"
+    },
+    {
+      "id": "D05",
+      "categoryId": "D",
+      "revision": 1,
+      "title": "セッションの区切り",
+      "implementation": "短時間で区切りよく終われる単位と、中断・再開時の状態保持を設計する",
+      "experience": "好きなタイミングで始めて終えられる",
+      "requiredCriteria": "対象の1セッション想定時間内に達成できる区切りが常に存在する。中断復帰で失われる状態を宣言し、宣言外の損失0件",
+      "additionalCriteria": "再開時に前回の文脈を短く思い出せ、再開が負担にならない",
+      "documentPath": "quality/items/D-ゲーム全般/D05-セッションの区切り.md"
+    },
+    {
+      "id": "D06",
+      "categoryId": "D",
+      "revision": 1,
+      "title": "詰みの排除",
+      "implementation": "進行不能状態の列挙、回避設計、復帰経路の実装",
+      "experience": "続けられなくなる不安がない",
+      "requiredCriteria": "到達可能な全状態から目標へ進める経路がある。進行不能の再現手順を事前登録し観測0件。発生時の復帰手段を提供する",
+      "additionalCriteria": "誤った選択でも損失が学びに変わり、やり直しが挑戦として楽しめる",
+      "documentPath": "quality/items/D-ゲーム全般/D06-詰みの排除.md"
+    },
+    {
+      "id": "D07",
+      "categoryId": "D",
+      "revision": 1,
+      "title": "ルールの一貫性",
+      "implementation": "ゲーム内ルールの正本、例外一覧、表示との対応管理",
+      "experience": "ルールを信じて計画できる",
+      "requiredCriteria": "提示したルールと実挙動の不一致0件。例外は事前に提示する。同じ条件で結果が異なる隠しルール0件",
+      "additionalCriteria": "ルール同士の組み合わせから利用者が発見する遊びがあり、設計側の想定表と照合できる",
+      "documentPath": "quality/items/D-ゲーム全般/D07-ルールの一貫性.md"
+    },
+    {
+      "id": "D08",
+      "categoryId": "D",
+      "revision": 1,
+      "title": "確率と期待の説明",
+      "implementation": "抽選・成功率・報酬確率の表示、実測との整合、演出と結果の対応",
+      "experience": "運の要素を納得して受け入れられる",
+      "requiredCriteria": "表示確率と実測値の差が宣言した許容内。演出が結果を偽らない(成功演出後の失敗0件)。確率の変動条件を提示する",
+      "additionalCriteria": "運の偏りを緩和する救済が説明可能で、体感と統計が一致する",
+      "documentPath": "quality/items/D-ゲーム全般/D08-確率と期待の説明.md"
+    },
+    {
+      "id": "D09",
+      "categoryId": "D",
+      "revision": 1,
+      "title": "資源と経済の均衡",
+      "implementation": "資源の入手・消費・上限、価格、インフレと枯渇の監視",
+      "experience": "手に入れたものに価値を感じ続けられる",
+      "requiredCriteria": "主要資源の入手経路と消費先を対応表で管理し、無限増殖・使い道のない資源・入手不能な要求0件。継続利用(S)で残高推移を記録する",
+      "additionalCriteria": "資源の使い道に選択があり、余りが新しい目的へつながる",
+      "documentPath": "quality/items/D-ゲーム全般/D09-資源と経済の均衡.md"
+    },
+    {
+      "id": "D10",
+      "categoryId": "D",
+      "revision": 1,
+      "title": "選択の意味",
+      "implementation": "選択肢ごとの結果差、取り消し可否、結果の提示",
+      "experience": "自分の決断が体験を変えたと感じる",
+      "requiredCriteria": "結果が同一の偽の選択0件。取り返しのつかない選択は事前に明示する。選択結果を後から確認できる",
+      "additionalCriteria": "選択の帰結が後の場面まで残り、別の選択を試したくなる",
+      "documentPath": "quality/items/D-ゲーム全般/D10-選択の意味.md"
+    },
+    {
+      "id": "D11",
+      "categoryId": "D",
+      "revision": 1,
+      "title": "世界の一貫性",
+      "implementation": "設定、用語、名称、単位、時間の流れの正本と整合検査",
+      "experience": "世界を信じて没入できる",
+      "requiredCriteria": "用語・名称・設定の矛盾0件。現実データと架空設定の対応範囲を宣言し、範囲外での表示を定義する",
+      "additionalCriteria": "世界の細部同士が呼応し、説明されない部分にも法則を感じられる",
+      "documentPath": "quality/items/D-ゲーム全般/D11-世界の一貫性.md"
+    },
+    {
+      "id": "D12",
+      "categoryId": "D",
+      "revision": 1,
+      "title": "語りと体験の整合",
+      "implementation": "物語・演出・テキストが実際の操作や結果と矛盾しないよう管理する",
+      "experience": "語られたことがそのまま起きる",
+      "requiredCriteria": "説明文・演出・実挙動の不一致0件。未実装機能を示唆する表示0件",
+      "additionalCriteria": "語らずに状況で伝える場面があり、利用者が自分で意味を見つけられる",
+      "documentPath": "quality/items/D-ゲーム全般/D12-語りと体験の整合.md"
+    },
+    {
+      "id": "D13",
+      "categoryId": "D",
+      "revision": 1,
+      "title": "反復の設計",
+      "implementation": "繰り返しの単位、周回ごとの変化、作業感の監視",
+      "experience": "何度やっても新しさや上達を感じる",
+      "requiredCriteria": "主要な反復行動の所要時間と変化要素を記録し、変化のない反復が連続する上限を宣言する。継続利用(S)で離脱理由を記録する",
+      "additionalCriteria": "反復の中に上達・発見・関係の変化があり、自分から繰り返したくなる",
+      "documentPath": "quality/items/D-ゲーム全般/D13-反復の設計.md"
+    },
+    {
+      "id": "D14",
+      "categoryId": "D",
+      "revision": 1,
+      "title": "不在時間の扱い",
+      "implementation": "利用していない時間の状態進行(進める・止める)の方針と、復帰時の要約",
+      "experience": "離れても安心して戻れる",
+      "requiredCriteria": "不在中の状態変化を宣言し、宣言外の損失0件。復帰時に不在中の出来事を要約する。不在の罰則は事前に提示する",
+      "additionalCriteria": "不在中の出来事が戻る理由になり、戻った時に歓迎される",
+      "documentPath": "quality/items/D-ゲーム全般/D14-不在時間の扱い.md"
+    },
+    {
+      "id": "D15",
+      "categoryId": "D",
+      "revision": 1,
+      "title": "現実連動の誠実さ",
+      "implementation": "位置・天気・時刻など現実データへの依存範囲、非対応時の体験、精度の表示",
+      "experience": "現実とつながる驚きを裏切られずに楽しめる",
+      "requiredCriteria": "依存先・更新頻度・非対応地域や時間帯を宣言し、非対応時に代替体験を提供する。取得失敗を成功と偽る表示0件。個人の位置を推定できる出力0件",
+      "additionalCriteria": "現実の変化が世界の変化として自然に現れ、地域や時間ごとの固有の体験がある",
+      "documentPath": "quality/items/D-ゲーム全般/D15-現実連動の誠実さ.md"
+    },
+    {
+      "id": "D16",
+      "categoryId": "D",
+      "revision": 1,
+      "title": "権限要求の文脈",
+      "implementation": "カメラ・位置・センサー・通知などの許可要求のタイミング、理由表示、拒否時の継続",
+      "experience": "許可の理由が分かり、断っても遊べる",
+      "requiredCriteria": "許可要求は必要な操作の直後に理由付きで出す。事前の一括要求0件。拒否時に利用できる範囲を提示し停止しない",
+      "additionalCriteria": "許可なしでも核の体験に近づけ、許可後の違いが体験で伝わる",
+      "documentPath": "quality/items/D-ゲーム全般/D16-権限要求の文脈.md"
+    },
+    {
+      "id": "D17",
+      "categoryId": "D",
+      "revision": 1,
+      "title": "課金と公平性",
+      "implementation": "販売内容・価格・効果の表示、無課金の到達範囲、購入の取り消しと復元",
+      "experience": "支払っても支払わなくても納得して遊べる",
+      "requiredCriteria": "購入前に内容・価格・有効期間を確定表示する。購入結果の未反映・二重付与0件。無課金で到達できる範囲を宣言し、演出で誤認させない",
+      "additionalCriteria": "支払いが体験の延長として自然で、購入後に後悔しないことを利用者観察で確かめる",
+      "documentPath": "quality/items/D-ゲーム全般/D17-課金と公平性.md"
+    },
+    {
+      "id": "D18",
+      "categoryId": "D",
+      "revision": 1,
+      "title": "所有物の継続性",
+      "implementation": "端末内保存、引き継ぎ、削除、復元の手段と範囲",
+      "experience": "手に入れたものを失わない",
+      "requiredCriteria": "保存対象と非対象を宣言する。更新・機種変更・再インストールで宣言した範囲の損失0件。削除は利用者の明示操作だけで行う",
+      "additionalCriteria": "引き継ぎが短時間で終わり、失った場合の復元経路がある",
+      "documentPath": "quality/items/D-ゲーム全般/D18-所有物の継続性.md"
+    },
+    {
+      "id": "D19",
+      "categoryId": "D",
+      "revision": 1,
+      "title": "開発表示の分離",
+      "implementation": "デバッグUI・計測表示・調整パラメータの本番からの隔離、切替条件の管理",
+      "experience": "完成した作品として遊べる",
+      "requiredCriteria": "本番既定で開発用表示0件。開発用切替が本番の保存状態や結果に影響しない。切替条件を文書化する",
+      "additionalCriteria": "開発表示を出しても体験の核が崩れず、検証者が本番と同じ判断ができる",
+      "documentPath": "quality/items/D-ゲーム全般/D19-開発表示の分離.md"
+    },
+    {
+      "id": "D20",
+      "categoryId": "D",
+      "revision": 1,
+      "title": "配信資産の版整合",
+      "implementation": "本体・資産・スクリプトの版印、キャッシュ更新、混在検知",
+      "experience": "更新後すぐ正しい状態で遊べる",
+      "requiredCriteria": "版の異なる本体と資産の混在0件。更新後の初回起動で旧資産が残らない。混在を検知した場合は明示し黙って続行しない",
+      "additionalCriteria": "更新内容が利用者に伝わり、更新前との違いを確認できる",
+      "documentPath": "quality/items/D-ゲーム全般/D20-配信資産の版整合.md"
     },
     {
       "id": "A01",
@@ -856,6 +1086,226 @@
       "requiredCriteria": "核の場面でH評価4。成功を操作不能な長い演出だけで代用しない",
       "additionalCriteria": "熟練者の工夫が映像に残り、何度も再現したくなる",
       "documentPath": "quality/items/A-アクションゲーム/A45-核となる一瞬.md"
+    },
+    {
+      "id": "P01",
+      "categoryId": "P",
+      "revision": 1,
+      "title": "存在の連続性",
+      "implementation": "位置・姿勢・状態の連続した更新。瞬間移動・消失・複製の禁止",
+      "experience": "目を離しても同じ個体がそこに居続ける",
+      "requiredCriteria": "理由のないワープ・消失・複製0件。画面外・再表示・モード切替でも位置と状態が連続する。連続性を切る場面は演出として記録する",
+      "additionalCriteria": "居ない間の行動が推測でき、戻った時に何をしていたかが読める",
+      "documentPath": "quality/items/P-キャラクタープレゼンス/P01-存在の連続性.md"
+    },
+    {
+      "id": "P02",
+      "categoryId": "P",
+      "revision": 1,
+      "title": "空間の占有",
+      "implementation": "実寸、接地、影、遮蔽、視差で同じ空間に置く",
+      "experience": "同じ場所に本当に居ると感じる",
+      "requiredCriteria": "接地の浮遊・沈み込み0件、接地影の欠落0件(V基準)。実寸と表示距離の整合を距離別に記録する。遮蔽物との前後関係の破綻0件",
+      "additionalCriteria": "空間の光や風、床の材質がキャラクターの見え方に反映される",
+      "documentPath": "quality/items/P-キャラクタープレゼンス/P02-空間の占有.md"
+    },
+    {
+      "id": "P03",
+      "categoryId": "P",
+      "revision": 1,
+      "title": "視線と注意",
+      "implementation": "利用者・物・音への視線と顔向き、注意の切り替え",
+      "experience": "自分に気づいていると感じる",
+      "requiredCriteria": "呼びかけ・接近・提示に対する視線と顔向きの反応をI内で開始する。無反応の連続0件。注視対象と視線の食い違い0件",
+      "additionalCriteria": "注意の向け方に個体差や気分があり、こちらを意識していると感じる瞬間がある",
+      "documentPath": "quality/items/P-キャラクタープレゼンス/P03-視線と注意.md"
+    },
+    {
+      "id": "P04",
+      "categoryId": "P",
+      "revision": 1,
+      "title": "待機の生気",
+      "implementation": "待機中の呼吸・重心移動・小動作・周囲確認",
+      "experience": "何もしていない時も生きている",
+      "requiredCriteria": "待機中に一定時間以上完全静止する状態0件(演出の睡眠を除く)。同一動作の完全な周期反復を継続利用(S)で観察し、機械的に見える指摘を記録する",
+      "additionalCriteria": "待機の振る舞いに状況や関係が反映され、見ているだけで飽きない",
+      "documentPath": "quality/items/P-キャラクタープレゼンス/P04-待機の生気.md"
+    },
+    {
+      "id": "P05",
+      "categoryId": "P",
+      "revision": 1,
+      "title": "働きかけへの応答",
+      "implementation": "触る・呼ぶ・与える・道具を使うへの応答の受付と表現",
+      "experience": "働きかけが届いたと分かる",
+      "requiredCriteria": "働きかけからの最初の反応をI基準内で返す。働きかけと反応の対応の食い違い0件。受け付けない場合も理由が読める反応を返す",
+      "additionalCriteria": "働きかけ方の違い(強さ、場所、順序)が反応の違いに現れる",
+      "documentPath": "quality/items/P-キャラクタープレゼンス/P05-働きかけへの応答.md"
+    },
+    {
+      "id": "P06",
+      "categoryId": "P",
+      "revision": 1,
+      "title": "応答の幅と理解",
+      "implementation": "同一入力への反応のバリエーション、状態依存の分岐、理解可能性",
+      "experience": "生き物らしさと分かりやすさが両立する",
+      "requiredCriteria": "主要な働きかけに状態別の反応を定義し、同一反応の連続上限を設ける。反応の意味が利用者に伝わる率を観察する",
+      "additionalCriteria": "反応の積み重ねから性格が読め、利用者が個体を語れる",
+      "documentPath": "quality/items/P-キャラクタープレゼンス/P06-応答の幅と理解.md"
+    },
+    {
+      "id": "P07",
+      "categoryId": "P",
+      "revision": 1,
+      "title": "個体の同一性",
+      "implementation": "個体ID、外見・名前・特徴の固定、入れ替わり防止",
+      "experience": "「この子」と分かる",
+      "requiredCriteria": "個体の入れ替わり・重複・喪失0件。連れ帰り・配置・保存再開を通じてIDと外見が一致する。同種の個体を見分けられる特徴がある",
+      "additionalCriteria": "見た目以外の癖や好みで個体を識別でき、愛着の対象になる",
+      "documentPath": "quality/items/P-キャラクタープレゼンス/P07-個体の同一性.md"
+    },
+    {
+      "id": "P08",
+      "categoryId": "P",
+      "revision": 1,
+      "title": "状態の持続と変化",
+      "implementation": "汚れ・満腹・疲労・機嫌などの状態の保存、時間経過、表示",
+      "experience": "世話の必要と結果が続く",
+      "requiredCriteria": "状態が保存され、再開後に整合する。時間経過の方針を宣言し、宣言外の急変0件。状態と見た目・振る舞いの不一致0件",
+      "additionalCriteria": "状態の変化が予兆として現れ、世話の先回りができる",
+      "documentPath": "quality/items/P-キャラクタープレゼンス/P08-状態の持続と変化.md"
+    },
+    {
+      "id": "P09",
+      "categoryId": "P",
+      "revision": 1,
+      "title": "関係の記憶",
+      "implementation": "なつき度・履歴・出来事の記録と振る舞いへの反映",
+      "experience": "関わった分だけ関係が深まる",
+      "requiredCriteria": "関係値が保存され、閾値ごとの振る舞い差を定義する。関係が理由なく消える・巻き戻る事象0件。過去の関わりを参照できる",
+      "additionalCriteria": "個別の出来事(初めて会った日、特別な世話)が振る舞いに残る",
+      "documentPath": "quality/items/P-キャラクタープレゼンス/P09-関係の記憶.md"
+    },
+    {
+      "id": "P10",
+      "categoryId": "P",
+      "revision": 1,
+      "title": "自律行動",
+      "implementation": "目的を持った自発的な移動・休息・遊びと、行動理由の可読性",
+      "experience": "自分の意思で暮らしていると感じる",
+      "requiredCriteria": "利用者の入力なしに行動が変化する。行動の目的を観察者が推測できる率を記録する。壁抜け・固着・無限反復0件",
+      "additionalCriteria": "自律行動が利用者の行動や環境の変化に応じて変わり、生活のリズムが見える",
+      "documentPath": "quality/items/P-キャラクタープレゼンス/P10-自律行動.md"
+    },
+    {
+      "id": "P11",
+      "categoryId": "P",
+      "revision": 1,
+      "title": "距離と親密さ",
+      "implementation": "近づく・逃げる・距離を保つの表現と、関係値との対応",
+      "experience": "距離の取り方から気持ちが読める",
+      "requiredCriteria": "関係値と接近・逃避の対応を定義し、不一致0件。逃げる際の理由(驚き、警戒)が表現から読める",
+      "additionalCriteria": "距離の変化が関係の変化を語り、近づける喜びがある",
+      "documentPath": "quality/items/P-キャラクタープレゼンス/P11-距離と親密さ.md"
+    },
+    {
+      "id": "P12",
+      "categoryId": "P",
+      "revision": 1,
+      "title": "身体感触の表現",
+      "implementation": "毛皮・皮膚・重さ・柔らかさの視覚表現、接触時の変形と反応",
+      "experience": "触れた感じが画面越しに伝わる",
+      "requiredCriteria": "接触部位の変形・毛の動き・反応を接触位置と一致させ、位置ずれ0件。触感のH/V判定3以上",
+      "additionalCriteria": "触り方の違いが感触の違いに現れ、触ること自体が目的になる",
+      "documentPath": "quality/items/P-キャラクタープレゼンス/P12-身体感触の表現.md"
+    },
+    {
+      "id": "P13",
+      "categoryId": "P",
+      "revision": 1,
+      "title": "生活空間との接触",
+      "implementation": "家具・物への乗る・隠れる・回り込むと、当たり判定と見た目の一致",
+      "experience": "部屋の中で暮らしていると感じる",
+      "requiredCriteria": "貫通・浮遊・埋まり0件(V基準)。隠れる・乗る等の環境利用を定義し、見た目と判定が一致する",
+      "additionalCriteria": "環境の使い方に個体の好みが現れ、居場所ができる",
+      "documentPath": "quality/items/P-キャラクタープレゼンス/P13-生活空間との接触.md"
+    },
+    {
+      "id": "P14",
+      "categoryId": "P",
+      "revision": 1,
+      "title": "光と背景への馴染み",
+      "implementation": "背景(写真・カメラ・生成画像)との照明・色・影・露出の整合",
+      "experience": "合成ではなくそこに居ると見える",
+      "requiredCriteria": "背景と主体の色温度・露出・影の方向の整合をVで判定し3以上。背景切替時に照明が追従する。馴染みの弱さの指摘を再現条件付きで記録する",
+      "additionalCriteria": "背景の時間帯や天候の変化が主体に反映され、写真の中で生きて見える",
+      "documentPath": "quality/items/P-キャラクタープレゼンス/P14-光と背景への馴染み.md"
+    },
+    {
+      "id": "P15",
+      "categoryId": "P",
+      "revision": 1,
+      "title": "音と気配",
+      "implementation": "鳴き声・足音・反応音・環境音の定位と同期",
+      "experience": "見ていなくてもそこに居ると分かる",
+      "requiredCriteria": "音と動作のずれAV基準内。位置に応じた定位。音を採用した反応で無音0件。音の重なりで聞き取れない状態0件",
+      "additionalCriteria": "音だけで状態や気分が分かり、気配で振り向く体験がある",
+      "documentPath": "quality/items/P-キャラクタープレゼンス/P15-音と気配.md"
+    },
+    {
+      "id": "P16",
+      "categoryId": "P",
+      "revision": 1,
+      "title": "現実空間への定着",
+      "implementation": "ARのアンカー、センサー融合、画面外での位置保持、復帰",
+      "experience": "端末を動かしても同じ場所に居る",
+      "requiredCriteria": "画面外に出て戻った時の位置ずれを宣言した許容内に収める。センサー喪失時の挙動を定義し、無言の消失0件",
+      "additionalCriteria": "端末を回り込むと角度が変わり、置いた場所を覚えている",
+      "documentPath": "quality/items/P-キャラクタープレゼンス/P16-現実空間への定着.md"
+    },
+    {
+      "id": "P17",
+      "categoryId": "P",
+      "revision": 1,
+      "title": "出現と退場",
+      "implementation": "召喚・登場・退場・消滅の演出と理由付け、突然のポップイン防止",
+      "experience": "現れ方と去り方に納得できる",
+      "requiredCriteria": "理由のないポップイン・ポップアウト0件。出現・退場が状態遷移と一致する。読み込み待ちを演出で覆う場合は待ち時間を記録する",
+      "additionalCriteria": "出現・退場が世界の法則として語られ、次の出会いを期待できる",
+      "documentPath": "quality/items/P-キャラクタープレゼンス/P17-出現と退場.md"
+    },
+    {
+      "id": "P18",
+      "categoryId": "P",
+      "revision": 1,
+      "title": "複数個体の関係",
+      "implementation": "個体同士の距離・相互作用・優先順位、重なり防止",
+      "experience": "群れや仲間として生きている",
+      "requiredCriteria": "個体同士の貫通・重なり0件。相互作用(挨拶、いじめ、遊び)を定義し、一方だけが動く不自然な状態0件",
+      "additionalCriteria": "個体間の関係が変化し、利用者が仲裁や見守りをしたくなる",
+      "documentPath": "quality/items/P-キャラクタープレゼンス/P18-複数個体の関係.md"
+    },
+    {
+      "id": "P19",
+      "categoryId": "P",
+      "revision": 1,
+      "title": "不在の設計",
+      "implementation": "居ない・いなくなる・戻るの説明、不在中の痕跡、喪失の扱い",
+      "experience": "居ない時も存在を感じられる",
+      "requiredCriteria": "不在の理由を提示し、無説明の不在0件。不在中の痕跡(足跡、寝床、残したもの)を定義する。喪失(逃走・別れ)には事前に予兆を出す",
+      "additionalCriteria": "不在が物語になり、戻った時の再会が体験の山になる",
+      "documentPath": "quality/items/P-キャラクタープレゼンス/P19-不在の設計.md"
+    },
+    {
+      "id": "P20",
+      "categoryId": "P",
+      "revision": 1,
+      "title": "実在性の総合審査",
+      "implementation": "実在性を評価する場面の固定、比較作品、時刻付き映像、違和感の記録",
+      "experience": "「そこに居る」と感じる",
+      "requiredCriteria": "適用する本カテゴリ項目の必須達成に加え、核の場面のH/V判定4。違和感の瞬間・操作・期待・実際を全件記録し、再現条件を残す",
+      "additionalCriteria": "初見者が個体を名前で呼び、居ないと寂しいと語る観察が得られる",
+      "documentPath": "quality/items/P-キャラクタープレゼンス/P20-実在性の総合審査.md"
     },
     {
       "id": "L01",
