@@ -5,9 +5,9 @@
   "templateRules": [],
   "membership": [
     {"pathPattern":"(^|/)shared/local\\.ts$"},
-    {"pathPattern":"(^|/)src/(projects/(registry|page)|runtime/local-access|http/local)\\.ts$"},
+    {"pathPattern":"(^|/)src/(projects/(registry|page)|runtime/(local-access|access-level|cf-access|cf-jwt)|http/local)\\.ts$"},
     {"pathPattern":"(^|/)web/src/(LocalProjects|HumanReview)\\.tsx$"},
-    {"pathPattern":"(^|/)tests/(public-local-boundary|human-reviews|project-page)\\.test\\.mjs$"}
+    {"pathPattern":"(^|/)tests/(public-local-boundary|human-reviews|project-page|cf-access)\\.test\\.mjs$"}
   ],
   "specRefs": ["spec/feature/public-local-evaluation.md", "spec/data/schema.md"]
 }

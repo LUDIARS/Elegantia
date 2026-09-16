@@ -7,3 +7,5 @@ export const humanReviewSchema = z.object({
 export type HumanReviewInput = z.infer<typeof humanReviewSchema>;
 export interface HumanReview extends HumanReviewInput { sequence: number; recordedAt: string }
 export interface LocalProject { code: string; project: string; updatedAt: number }
+
+export type AccessLevel = 'local' | 'viewer' | 'public';

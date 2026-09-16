@@ -19,6 +19,11 @@ ExViewは同じ信頼範囲にある内部アプリの中継。外部からの�
 Elegantiaはユーザー単位の認証・権限分離を提供せず、許可されたViewer利用者が試験履歴を共有する。
 入口側のAccess保護がない状態でインターネットへ公開しない。
 
+直接公開URL (Tunnel直結) で評価・申し送りを閲覧させる場合は、Cloudflare Accessのアプリケーションを公開URLに掛け、
+そのAudienceタグと団体ドメインをELEGANTIA_CF_ACCESS_AUD / ELEGANTIA_CF_ACCESS_TEAM_DOMAINで本体へ渡す。
+サーバはCf-Access-Jwt-Assertionの署名を団体の公開鍵で検証し、検証できた要求だけを読み取り専用のviewerとして扱う。
+書き込みは引き続きループバックのローカルツールに限る。
+
 ELEGANTIA_VIEWER_ORIGINSに完全一致のOriginだけを列挙する。
 Tunnel直結はExから注入するELEGANTIA_PUBLIC_URLを読み、完全一致のHTTPS Originとして許可する。
 module scriptとWebSocketも同じOrigin判定を使う。未設定ならローカルと追加Viewer Originのみ許可する。

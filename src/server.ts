@@ -10,6 +10,7 @@ import { ResultRepository } from './db/repository.js';
 import { HumanReviews } from './db/human-reviews.js';
 import { createApp } from './http/app.js';
 import { attachSocket } from './http/socket.js';
+import { CfAccessVerifier } from './runtime/cf-access.js';
 
 async function main(): Promise<void> {
   const root = process.cwd();
@@ -25,7 +26,8 @@ async function main(): Promise<void> {
   try { database = await connectDatabase(config.databasePath, resolve(root, 'migrations/001_results.sql')); }
   catch (error) { logger.write({ level: 'error', msg: 'Database initialization failed' }); await logger.close(); throw error; }
   const repository = new ResultRepository(database.db, () => new Date());
-  const app = createApp({ config, catalog, repository, logger, ping: database.ping, reviews: new HumanReviews(database.db, () => new Date()) });
+  const cfAccess = config.cfAccess ? new CfAccessVerifier(config.cfAccess) : undefined;
+  const app = createApp({ config, catalog, repository, logger, ping: database.ping, reviews: new HumanReviews(database.db, () => new Date()), cfAccess });
   const server = serve({ fetch: app.fetch, hostname: config.host, port: config.port });
   if (!(server instanceof Server)) {
     server.close(); await database.close(); await logger.close();

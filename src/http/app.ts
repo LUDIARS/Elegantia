@@ -10,7 +10,9 @@ import { allowedHost } from './access.js';
 import { clientError } from './errors.js';
 import type { ServerConfig } from '../runtime/config.js';
 import { libraryRouter } from './library.js';
-import { isLocalAccess } from '../runtime/local-access.js';
+import { allowsMethod, resolveAccessLevel } from '../runtime/access-level.js';
+import type { CfAccessVerifier } from '../runtime/cf-access.js';
+import type { AccessLevel } from '../../shared/local.js';
 import { localRouter } from './local.js';
 import type { HumanReviews } from '../db/human-reviews.js';
 
@@ -18,10 +20,15 @@ export interface AppDependencies {
   catalog: Catalog; repository: ResultRepository; config: ServerConfig; logger: Writer;
   ping: () => Promise<void>;
   reviews: HumanReviews;
+  cfAccess?: CfAccessVerifier;
 }
 export function createApp(deps: AppDependencies): Hono {
   const { config, catalog, repository, logger } = deps;
   const app = new Hono();
+  const levelFor = (c: { req: { header(name: string): string | undefined } }): Promise<AccessLevel> => resolveAccessLevel({
+    mode: config.mode, port: config.port, host: c.req.header('host'), origin: c.req.header('origin'),
+    assertion: c.req.header('cf-access-jwt-assertion'), verifier: deps.cfAccess,
+  });
   const publicPaths = new Set(['/api/runtime', '/api/health', '/api/catalog', '/api/catalog.md', '/api/policy', '/api/library']);
   app.use('*', async (c, next) => {
     if (!allowedHost(c.req.header('host'), config.hosts)) return c.json({ error: 'Host not allowed' }, 403);
@@ -29,8 +36,10 @@ export function createApp(deps: AppDependencies): Hono {
     if (origin && !config.origins.has(origin)) return c.json({ error: 'Origin not allowed' }, 403);
     const isPublicContent = publicPaths.has(c.req.path) || /^\/api\/items\/[CDAPLGE]\d{2}\/document$/.test(c.req.path)
       || /^\/api\/library\/[^/]+\/document$/.test(c.req.path);
-    if (c.req.path.startsWith('/api/') && !isPublicContent
-      && !isLocalAccess(config.mode, config.port, c.req.header('host'), origin)) return c.json({ error: 'Local tool only' }, 403);
+    if (c.req.path.startsWith('/api/') && !isPublicContent) {
+      const level = await levelFor(c);
+      if (!allowsMethod(level, c.req.method)) return c.json({ error: level === 'viewer' ? 'Read-only viewer' : 'Local tool only' }, 403);
+    }
     c.header('X-Content-Type-Options', 'nosniff');
     c.header('Referrer-Policy', 'no-referrer');
     c.header('Cross-Origin-Resource-Policy', 'same-origin');
@@ -47,7 +56,7 @@ export function createApp(deps: AppDependencies): Hono {
     catch { return c.json({ service: 'elegantia', status: 'database_unavailable' }, 503); }
   });
   app.get('/api/catalog', c => c.json(catalog));
-  app.get('/api/runtime', c => c.json({ mode: isLocalAccess(config.mode, config.port, c.req.header('host'), c.req.header('origin')) ? 'local' : 'public' }));
+  app.get('/api/runtime', async c => c.json({ mode: await levelFor(c) }));
   app.route('/api/local', localRouter(config, deps.reviews, catalog));
   app.route('/api/library', libraryRouter(config.root));
   app.get('/api/policy', async c => c.json({ markdown: await readFile(config.root + '/quality/assessment-policy.md', 'utf8') }));

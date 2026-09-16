@@ -10,16 +10,23 @@ status: implemented
 
 ## 価値と不変条件
 EL-LOCAL-01: 公開利用者は単語検索で基準を探せる。プロジェクト・ビルド・環境の自由入力を求めない。
-EL-LOCAL-02: 評価・登録プロジェクト・申し送りは公開HTTPから取得・変更できない。
+EL-LOCAL-02: 評価・登録プロジェクト・申し送りは公開HTTPから変更できない。取得はEL-LOCAL-06の検証済みCloudflare Access要求に限る。
 EL-LOCAL-03: ローカル一覧はCc登録プロジェクトを更新降順、同時刻は名前順で10件ずつ表示する。
 EL-LOCAL-04: 人間のOK/NGとコメントは試験合否とは別の追記履歴であり、以前の判断を消さない。
 EL-LOCAL-05: 調査分析は利用者のローカルLLMで実行し、WebサーバにLLM実行APIは設けない。
+EL-LOCAL-06: 公開URLからの評価・申し送りの閲覧は、Cloudflare Accessがこのアプリケーション向けに発行した署名付きトークン (Cf-Access-Jwt-Assertion) をサーバが検証できた要求 (viewer) だけに許す。viewerはGET/HEADのみで、記録の追加・インポート・WebSocketは引き続きローカルだけが行う。
 
 ## 利用モード
 ELEGANTIA_MODEはpublicが既定。localを明示したサーバへlocalhost/127.0.0.1の所有ポートで接続した場合のみローカル機能を許可する。
 Origin付き要求は同じローカル許可集合に属する必要がある。公開Hostの要求はlocal設定時にも公開機能だけを提供する。
 WebSocketはローカルモード・ローカルHost/Origin・接続元ループバックをすべて要求する。
 X-Forwarded-HostやForwardedからローカル権限を判断しない。中継で公開Hostをlocalhostへ書き換えないこと。
+
+## Cloudflare Access経由の閲覧 (viewer)
+ELEGANTIA_CF_ACCESS_TEAM_DOMAIN (https://<team>.cloudflareaccess.com) とELEGANTIA_CF_ACCESS_AUD (アプリケーションのAudienceタグ) を両方設定した時だけ有効。片方だけなら起動を拒否する。
+検証は団体ドメインの/cdn-cgi/access/certsから取得したRS256鍵で署名を確かめ、iss・aud・exp・nbfを照合する。署名の無いCf-Access-Authenticated-User-Emailは判断に使わない。
+鍵は10分キャッシュし、未知のkidは60秒に1回だけ再取得する。鍵取得の失敗・不正な応答は公開扱い (拒否) にし、例外で落とさない。
+viewerは/api/runtimeでmode=viewerを返し、Webは登録プロジェクト・評価概況・試験履歴・申し送り履歴・結果JSONの取得だけを表示し、入力フォームを出さない。
 
 ## プロジェクトと評価
 Ccの所有カタログから接続先を解決し、project-codes/adminのcode/project/updated_atだけを読む。

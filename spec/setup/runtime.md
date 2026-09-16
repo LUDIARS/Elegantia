@@ -12,7 +12,10 @@ status: implemented
 
 所有カタログのELEGANTIA_MODE=publicが公開検索用の既定設定。
 ローカル評価を利用する配備ではExのサービス設定でELEGANTIA_MODE=localを明示し、
-本体へhttp://127.0.0.1:17860/で接続する。公開URLからはlocal設定時も評価を取得・変更できない。
+本体へhttp://127.0.0.1:17860/で接続する。公開URLからはlocal設定時も評価を変更できない。
+公開URLからの閲覧だけを許す場合はELEGANTIA_CF_ACCESS_TEAM_DOMAINとELEGANTIA_CF_ACCESS_AUDを両方設定する。
+Cloudflare Accessが発行した署名付きトークンを検証できた要求だけがGETで評価・申し送りを読める (spec/feature/public-local-evaluation.md EL-LOCAL-06)。
+両設定はExのサービス設定から注入し、リポジトリには書かない。片方だけの設定は起動時に拒否する。
 ローカル一覧には同じworkspaceのConcordia登録が必要。接続先はConcordia所有カタログから解決する。
 調査分析はローカル環境のLLMで実行する。サーバにはLLM実行機能がない。
 評価結果の受け渡しは既存の結果JSON形式を使用する。
